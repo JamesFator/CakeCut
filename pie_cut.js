@@ -80,7 +80,7 @@ function mouseMove(e) {
   if (canvas.onmousemove !== null) {
     x2 = e.pageX - canvas.offsetLeft;
     y2 = e.pageY - canvas.offsetTop;
-    console.log(x2 + "," + y2);
+    // console.log(x2 + "," + y2);
   }
 }
 
@@ -106,10 +106,10 @@ function mouseUp() {
   }
   var intersections = findCircleLineIntersections(arc_r, arc_x, arc_y, m, b);
   if (intersections.length == 0) {
-    console.log("Missed cake");
+    console.log("Missed pie");
     return;
   }
-  console.log(intersections);
+  // console.log(intersections);
 
   var iy1 = m * intersections[0] + b;
   var iy2 = m * intersections[1] + b;
@@ -132,7 +132,7 @@ function percentageOfArc(ix1, iy1, ix2, iy2) {
   ) {
     percent = inverse_percent;
   }
-  console.log(percent);
+  // console.log(percent);
   previous_percent = percent;
 }
 
