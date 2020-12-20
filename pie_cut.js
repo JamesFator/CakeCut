@@ -19,6 +19,7 @@ function getRandomPercent(min, max) {
 function startGame() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
+  setupTouchControls();
   // Reset the width/height in case someone changed window size.
   ctx.canvas.width = WIDTH = window.innerWidth;
   ctx.canvas.height = HEIGHT = window.innerHeight;
