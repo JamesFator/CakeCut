@@ -1,7 +1,7 @@
 # PieCut
 Mini-game where you divide pie into a specific percentage by volume. If the volume difference between the pie you cut and the target is within 5%, then you have won that round!
 
-TODO: Add photo
+![Screenshot](/example.png)
 
 ## Usage
 ```bash

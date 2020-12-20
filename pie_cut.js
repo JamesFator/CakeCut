@@ -38,28 +38,37 @@ function clear() {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
-function drawText() {
+function drawText(text, color, x, y) {
   ctx.font = "5em Helvetica";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#000000";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 15;
+  ctx.strokeText(text, x, y);
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+}
+
+function drawPrompts() {
   // fillText(text, x, y)
-  ctx.fillText("Cut a " + desired_percent + "% slice", arc_x, HEIGHT / 8);
+  drawText("Click and drag to", "white", arc_x, HEIGHT / 8 * 0.5);
+  drawText("cut a " + desired_percent + "% slice", "white", arc_x, HEIGHT / 8);
   if (previous_percent !== null) {
+    var color = "#ff0000"; // Red
     if (Math.abs(desired_percent - previous_percent) <= success_percent_diff) {
-      ctx.fillStyle = "#00ff00"; // Green
-    } else {
-      ctx.fillStyle = "#ff0000"; // Red
+      color = "#00ff00"; // Green
     }
-    ctx.fillText("Cut " + previous_percent + "%", arc_x, (HEIGHT / 8) * 7);
-    ctx.fillText("Click to restart", arc_x, (HEIGHT / 8) * 7.5);
+    drawText("Cut " + previous_percent + "%", color, arc_x, (HEIGHT / 8) * 7);
+    drawText("Click to restart", color, arc_x, (HEIGHT / 8) * 7.5);
   }
 }
 
 function drawCircle() {
-  ctx.beginPath();
-  // arc(x,y,r,sAngle,eAngle,counterclockwise)
-  ctx.arc(arc_x, arc_y, arc_r, 0, 2 * Math.PI);
-  ctx.stroke();
+  // ctx.beginPath();
+  // // arc(x,y,r,sAngle,eAngle,counterclockwise)
+  // ctx.arc(arc_x, arc_y, arc_r, 0, 2 * Math.PI);
+  // ctx.stroke();
+  var img = document.getElementById("pie");
+  ctx.drawImage(img, arc_x - arc_r, arc_y - arc_r, arc_r * 2, arc_r * 2);
 }
 
 function drawLine() {
@@ -71,7 +80,7 @@ function drawLine() {
 
 function draw() {
   clear();
-  drawText();
+  drawPrompts();
   drawCircle();
   drawLine();
 }
