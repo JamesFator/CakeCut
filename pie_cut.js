@@ -39,10 +39,10 @@ function clear() {
 }
 
 function drawText(text, color, x, y) {
-  ctx.font = "5em Helvetica";
+  ctx.font = "10vw Helvetica";
   ctx.textAlign = "center";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 15;
+  ctx.lineWidth = 10;
   ctx.strokeText(text, x, y);
   ctx.fillStyle = color;
   ctx.fillText(text, x, y);
@@ -50,23 +50,19 @@ function drawText(text, color, x, y) {
 
 function drawPrompts() {
   // fillText(text, x, y)
-  drawText("Click and drag to", "white", arc_x, HEIGHT / 8 * 0.5);
-  drawText("cut a " + desired_percent + "% slice", "white", arc_x, HEIGHT / 8);
+  drawText("Click and drag to", "white", arc_x, (HEIGHT / 4.5) * 0.5);
+  drawText("cut a " + desired_percent + "% slice", "white", arc_x, HEIGHT / 4.5);
   if (previous_percent !== null) {
     var color = "#ff0000"; // Red
     if (Math.abs(desired_percent - previous_percent) <= success_percent_diff) {
       color = "#00ff00"; // Green
     }
-    drawText("Cut " + previous_percent + "%", color, arc_x, (HEIGHT / 8) * 7);
-    drawText("Click to restart", color, arc_x, (HEIGHT / 8) * 7.5);
+    drawText("Cut " + previous_percent + "%", color, arc_x, (HEIGHT / 4.5) * 3.75);
+    drawText("Click to restart", color, arc_x, (HEIGHT / 4.5) * 4.25);
   }
 }
 
 function drawCircle() {
-  // ctx.beginPath();
-  // // arc(x,y,r,sAngle,eAngle,counterclockwise)
-  // ctx.arc(arc_x, arc_y, arc_r, 0, 2 * Math.PI);
-  // ctx.stroke();
   var img = document.getElementById("pie");
   ctx.drawImage(img, arc_x - arc_r, arc_y - arc_r, arc_r * 2, arc_r * 2);
 }
@@ -165,4 +161,54 @@ function findCircleLineIntersections(r, h, k, m, n) {
   }
   // no intersection
   return [];
+}
+
+function setupTouchControls() {
+  // Source http://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
+  // Set up touch events for mobile, etc
+  canvas.addEventListener(
+    "touchstart",
+    function (e) {
+      mousePos = getTouchPos(canvas, e);
+      e.preventDefault();
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousedown", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchend",
+    function (e) {
+      e.preventDefault();
+      var mouseEvent = new MouseEvent("mouseup", {});
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+  canvas.addEventListener(
+    "touchmove",
+    function (e) {
+      e.preventDefault();
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
+      canvas.dispatchEvent(mouseEvent);
+    },
+    false
+  );
+
+  // Get the position of a touch relative to the canvas
+  function getTouchPos(canvasDom, touchEvent) {
+    var rect = canvasDom.getBoundingClientRect();
+    return {
+      x: touchEvent.touches[0].clientX - rect.left,
+      y: touchEvent.touches[0].clientY - rect.top,
+    };
+  }
 }
