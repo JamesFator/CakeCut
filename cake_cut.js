@@ -1,9 +1,6 @@
 var canvas;
 var ctx;
-var x1,
-  y1,
-  x2,
-  y2 = 0;
+var x1, y1, x2, y2;
 var WIDTH;
 var HEIGHT;
 var arc_x;
@@ -21,14 +18,15 @@ function getRandomPercent(min, max) {
 
 function startGame() {
   canvas = document.getElementById("canvas");
-  var ctx = canvas.getContext("2d");
-  ctx.canvas.width = window.innerWidth;
-  WIDTH = window.innerWidth;
-  ctx.canvas.height = window.innerHeight;
-  HEIGHT = window.innerHeight;
+  ctx = canvas.getContext("2d");
+  // Reset the width/height in case someone changed window size.
+  ctx.canvas.width = WIDTH = window.innerWidth;
+  ctx.canvas.height = HEIGHT = window.innerHeight;
   arc_x = WIDTH / 2;
   arc_y = HEIGHT / 2;
   arc_r = Math.min(WIDTH / 4, HEIGHT / 4);
+  // Reset all parameters.
+  x1 = y1 = x2 = y2 = 0;
   desired_percent = getRandomPercent(10, 90);
   previous_percent = null;
   setInterval(draw, 10);
@@ -37,32 +35,27 @@ function startGame() {
 }
 
 function clear() {
-  var c = document.getElementById("canvas");
-  ctx = c.getContext("2d");
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
 
 function drawText() {
-  var c = document.getElementById("canvas");
-  ctx = c.getContext("2d");
   ctx.font = "5em Helvetica";
   ctx.textAlign = "center";
   ctx.fillStyle = "#000000";
   // fillText(text, x, y)
   ctx.fillText("Cut a " + desired_percent + "% slice", arc_x, HEIGHT / 8);
   if (previous_percent !== null) {
-      if (Math.abs(desired_percent - previous_percent) <= success_percent_diff) {
-        ctx.fillStyle = "#00ff00"; // Green
-      } else {
-        ctx.fillStyle = "#ff0000"; // Red
-      }
+    if (Math.abs(desired_percent - previous_percent) <= success_percent_diff) {
+      ctx.fillStyle = "#00ff00"; // Green
+    } else {
+      ctx.fillStyle = "#ff0000"; // Red
+    }
     ctx.fillText("Cut " + previous_percent + "%", arc_x, (HEIGHT / 8) * 7);
+    ctx.fillText("Click to restart", arc_x, (HEIGHT / 8) * 7.5);
   }
 }
 
 function drawCircle() {
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
   ctx.beginPath();
   // arc(x,y,r,sAngle,eAngle,counterclockwise)
   ctx.arc(arc_x, arc_y, arc_r, 0, 2 * Math.PI);
@@ -70,8 +63,6 @@ function drawCircle() {
 }
 
 function drawLine() {
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
@@ -96,6 +87,7 @@ function mouseMove(e) {
 function mouseDown(e) {
   if (previous_percent !== null) {
     startGame(); // Restart game
+    return;
   }
   x1 = e.pageX - 6;
   x2 = x1;
